@@ -54,7 +54,8 @@ if (decoderPtr.isNull()) {
   process.exit(1);
 }
 
-var buffer = fs.readFileSync(process.argv[2]);
+var infile = process.argv[2];
+var buffer = fs.readFileSync(infile);
 var output = Buffer.alloc((buffer.length / 64) * FRAME_SIZE * 2);
 
 var read = 0;
@@ -85,4 +86,4 @@ wav.fromScratch(
   "16",
   new Int16Array(output.buffer, output.byteOffset, output.length / 2)
 );
-fs.writeFileSync("out.wav", wav.toBuffer());
+fs.writeFileSync(infile + ".wav", wav.toBuffer());
