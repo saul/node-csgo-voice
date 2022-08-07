@@ -3,6 +3,11 @@ var ref = require("ref-napi");
 var fs = require("fs");
 var WaveFile = require("wavefile").WaveFile;
 
+if (process.argv.length !== 3) {
+  console.error(`Format: <input path>`);
+  process.exit(1);
+}
+
 var CELTMode = ref.types.void;
 var CELTModePtr = ref.refType(CELTMode);
 
@@ -55,6 +60,8 @@ if (decoderPtr.isNull()) {
 }
 
 var infile = process.argv[2];
+console.log(`Reading ${infile}...`);
+
 var buffer = fs.readFileSync(infile);
 var output = Buffer.alloc((buffer.length / 64) * FRAME_SIZE * 2);
 
@@ -71,13 +78,18 @@ while (read < buffer.length) {
   );
 
   if (ret < 0) {
-    console.error(`celt_decode failed (${ret}) at ${read}/${buffer.length}`);
+    console.error(`celt_decode failed (${ret})`);
     continue;
   }
 
   read += 64;
   written += FRAME_SIZE * 2;
+
+  process.stdout.write(`\rDecoded ${read}/${buffer.length}... `);
 }
+
+const outfile = infile + ".wav";
+console.log(`\nWriting output to ${outfile}...`);
 
 var wav = new WaveFile();
 wav.fromScratch(
@@ -86,4 +98,6 @@ wav.fromScratch(
   "16",
   new Int16Array(output.buffer, output.byteOffset, output.length / 2)
 );
-fs.writeFileSync(infile + ".wav", wav.toBuffer());
+fs.writeFileSync(outfile, wav.toBuffer());
+
+console.log(`Done!`);
