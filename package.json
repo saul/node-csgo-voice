@@ -1,0 +1,25 @@
+{
+  "name": "csgo-voice",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/saul/node-csgo-voice.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/saul/node-csgo-voice/issues"
+  },
+  "homepage": "https://github.com/saul/node-csgo-voice#readme",
+  "dependencies": {
+    "ffi-napi": "^4.0.3",
+    "node-gyp": "^9.1.0",
+    "ref-napi": "^3.0.3",
+    "wavefile": "^11.0.0"
+  }
+}
